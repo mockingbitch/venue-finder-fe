@@ -1,0 +1,16 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - venuefinder_network
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000/api
+    ports:
+      - "3000:3000"
+
+networks:
+  venuefinder_network:
+    external: true

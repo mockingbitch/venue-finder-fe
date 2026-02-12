@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #0f172a;
+  --background: #f8fafc;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.leaflet-container {
+  font-family: inherit;
+  height: 100%;
+  width: 100%;
+}
+
+.cluster-marker {
+  background: #dc2626;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.leaflet-div-icon.cluster-div-icon,
+.leaflet-div-icon.single-marker-icon {
+  background: none !important;
+  border: none !important;
+}
