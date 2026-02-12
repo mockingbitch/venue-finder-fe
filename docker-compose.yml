@@ -7,7 +7,7 @@ services:
     networks:
       - venuefinder_network
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000/api
+      NEXT_PUBLIC_API_URL: http://localhost:8008/api
     ports:
       - "3000:3000"
 

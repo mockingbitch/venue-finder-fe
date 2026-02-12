@@ -18,21 +18,38 @@ body {
   width: 100%;
 }
 
-.cluster-marker {
-  background: #dc2626;
-  color: white;
+/* Venue marker (single) */
+.venue-marker {
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
+  background: #dc2626;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.leaflet-div-icon.venue-marker-icon {
+  background: none !important;
+  border: none !important;
+}
+
+/* Venue cluster (MarkerClusterGroup) */
+.venue-cluster {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: white;
+  font-weight: 700;
   font-size: 0.875rem;
   border: 2px solid white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.leaflet-div-icon.cluster-div-icon,
-.leaflet-div-icon.single-marker-icon {
+.leaflet-div-icon.venue-cluster-icon {
   background: none !important;
   border: none !important;
 }

@@ -18,7 +18,7 @@ export function VenueCard({
   venue: Venue;
   sessionId?: string;
   isFavorited: boolean;
-  onFavoriteToggle: () => void;
+  onFavoriteToggle: (venueId: number, isFavorited: boolean) => void;
 }) {
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const imgSrc = venue.image_url || placeholderImage;
