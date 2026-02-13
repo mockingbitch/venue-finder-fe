@@ -1,0 +1,58 @@
+import type { Venue } from '@/types/venue';
+
+export const MOCK_VENUES: Venue[] = [
+  {
+    id: '1',
+    name: 'Grand Hall London',
+    description: 'Spacious event hall in the heart of London with modern amenities.',
+    address: '123 Westminster St, London SW1',
+    latitude: 51.5074,
+    longitude: -0.1278,
+    capacity: 500,
+  },
+  {
+    id: '2',
+    name: 'Riverside Pavilion',
+    description: 'Elegant waterside venue with stunning Thames views.',
+    address: '45 South Bank, London SE1',
+    latitude: 51.5055,
+    longitude: -0.1169,
+    capacity: 200,
+  },
+  {
+    id: '3',
+    name: 'East London Studios',
+    description: 'Creative space perfect for exhibitions and workshops.',
+    address: '78 Brick Lane, London E1',
+    latitude: 51.5219,
+    longitude: -0.0714,
+    capacity: 150,
+  },
+  {
+    id: '4',
+    name: 'Kensington Gardens Room',
+    description: 'Premium venue near Hyde Park with natural lighting.',
+    address: '22 Kensington High St, London W8',
+    latitude: 51.5045,
+    longitude: -0.1918,
+    capacity: 120,
+  },
+  {
+    id: '5',
+    name: 'Shoreditch Loft',
+    description: 'Industrial-chic loft space for intimate gatherings.',
+    address: '99 Great Eastern St, London EC2',
+    latitude: 51.5254,
+    longitude: -0.0776,
+    capacity: 80,
+  },
+  {
+    id: '6',
+    name: 'Greenwich Observatory Hall',
+    description: 'Historic venue with panoramic city views.',
+    address: 'Blackheath Ave, London SE10',
+    latitude: 51.4769,
+    longitude: -0.0005,
+    capacity: 300,
+  },
+];
