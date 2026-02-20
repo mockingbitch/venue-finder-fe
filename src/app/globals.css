@@ -4,6 +4,8 @@
 
 /* Leaflet CSS - required for map to render */
 @import 'leaflet/dist/leaflet.css';
+/* Marker cluster - gộp marker gần nhau (dùng path export của package) */
+@import 'react-leaflet-markercluster/styles';
 
 :root {
   --background: #f8fafc;

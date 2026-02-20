@@ -1,0 +1,229 @@
+{
+  "info": {
+    "name": "VenueFinder API",
+    "description": "REST API: Auth (JWT), Venues (public), Admin CRUD. Base URL và token lưu trong collection variables.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8089" },
+    { "key": "token", "value": "" },
+    { "key": "venueId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@venuefinder.test\",\n  \"password\": \"password\"\n}"
+            },
+            "url": "{{baseUrl}}/api/login"
+          }
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"email\": \"\",\n  \"password\": \"\",\n  \"password_confirmation\": \"\"\n}"
+            },
+            "url": "{{baseUrl}}/api/register"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "url": "{{baseUrl}}/api/refresh"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "url": "{{baseUrl}}/api/logout"
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "GET",
+            "url": "{{baseUrl}}/api/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Venues",
+      "item": [
+        {
+          "name": "Get venues",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    var list = json.data || [];",
+                  "    if (list.length && list[0].id) pm.collectionVariables.set('venueId', list[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/venues",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "venues"],
+              "query": [
+                { "key": "per_page", "value": "15", "disabled": true },
+                { "key": "search", "value": "", "disabled": true },
+                { "key": "min_capacity", "value": "", "disabled": true },
+                { "key": "max_price", "value": "", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get venues (bounding box)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    var list = json.data || [];",
+                  "    if (list.length && list[0].id) pm.collectionVariables.set('venueId', list[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/venues",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "venues"],
+              "query": [
+                { "key": "min_lat", "value": "" },
+                { "key": "max_lat", "value": "" },
+                { "key": "min_lng", "value": "" },
+                { "key": "max_lng", "value": "" },
+                { "key": "search", "value": "", "disabled": true },
+                { "key": "min_capacity", "value": "", "disabled": true },
+                { "key": "max_price", "value": "", "disabled": true },
+                { "key": "per_page", "value": "15", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get venue by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/venues/{{venueId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Create venue",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    var d = json.data;",
+                  "    if (d && d.id) pm.collectionVariables.set('venueId', d.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"\",\n  \"address\": \"\",\n  \"lat\": null,\n  \"lng\": null,\n  \"price\": 0,\n  \"capacity\": 0,\n  \"rating\": null,\n  \"images\": []\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/venues"
+          }
+        },
+        {
+          "name": "Update venue",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"\",\n  \"address\": \"\",\n  \"lat\": null,\n  \"lng\": null,\n  \"price\": null,\n  \"capacity\": null,\n  \"rating\": null,\n  \"images\": []\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/venues/{{venueId}}"
+          }
+        },
+        {
+          "name": "Delete venue",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}" }] },
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/admin/venues/{{venueId}}"
+          }
+        }
+      ]
+    }
+  ]
+}

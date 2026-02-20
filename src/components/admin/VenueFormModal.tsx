@@ -38,8 +38,8 @@ export function VenueFormModal({
       setName('');
       setDescription('');
       setAddress('');
-      setLatitude('51.505');
-      setLongitude('-0.09');
+      setLatitude('21.0285');
+      setLongitude('105.8542');
       setCapacity('');
       setImageUrl('');
     }

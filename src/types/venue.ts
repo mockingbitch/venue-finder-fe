@@ -9,6 +9,14 @@ export interface Venue {
   imageUrl?: string;
   createdAt?: string;
   updatedAt?: string;
+  /** Loại địa điểm (e.g. Function Venue, Ballroom, Hotel) */
+  category?: string;
+  /** Điểm đánh giá 0–5 */
+  rating?: number;
+  /** Số lượng review */
+  reviewCount?: number;
+  /** Mức giá (số ký $, e.g. 3 = $$$) */
+  priceRange?: number;
 }
 
 export interface VenueCreateInput {

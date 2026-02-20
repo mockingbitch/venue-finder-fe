@@ -35,7 +35,7 @@ export function VenueMap({
   );
 
   return (
-    <div className="relative h-full min-h-[400px] w-full overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+    <div className="relative h-full min-h-[380px] w-full overflow-hidden rounded-lg border border-slate-200 shadow-sm">
       <MapInner
         venues={venues}
         selectedVenueId={selectedVenueId}

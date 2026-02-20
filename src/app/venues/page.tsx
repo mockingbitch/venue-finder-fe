@@ -9,17 +9,18 @@ import type { Venue } from '@/types/venue';
 import type { BoundingBox } from '@/types/venue';
 import Link from 'next/link';
 
+// Bounds mặc định quanh Hà Nội (fetch venues lần đầu)
 const DEFAULT_BOUNDS: BoundingBox = {
-  north: 51.6,
-  south: 51.4,
-  east: -0.05,
-  west: -0.2,
+  north: 21.15,
+  south: 20.9,
+  east: 106.0,
+  west: 105.6,
 };
 
 export default function VenuesPage() {
   const [bounds, setBounds] = useState<BoundingBox | null>(DEFAULT_BOUNDS);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
-  const cardRefsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const cardRefsRef = useRef<Map<string, HTMLDivElement>>(new Map());
   const listContainerRef = useRef<HTMLDivElement>(null);
 
   const { data: venues = [], isLoading, isFetching, error } = useVenues(bounds);
@@ -41,7 +42,7 @@ export default function VenuesPage() {
     }
   }, [selectedVenueId]);
 
-  const setCardRef = useCallback((id: string, el: HTMLButtonElement | null) => {
+  const setCardRef = useCallback((id: string, el: HTMLDivElement | null) => {
     if (el) {
       cardRefsRef.current.set(id, el);
     } else {
@@ -84,19 +85,9 @@ export default function VenuesPage() {
         <h1 className="mb-6 text-2xl font-bold text-slate-900">Venues</h1>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="relative lg:col-span-2">
-            <VenueMap
-              venues={venues}
-              selectedVenueId={selectedVenueId}
-              onVenueSelect={handleVenueSelect}
-              onBoundsChange={handleBoundsChange}
-              isFetching={isFetching}
-            />
-          </div>
-
           <div
             ref={listContainerRef}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 order-2 lg:order-1"
           >
             {isLoading ? (
               <VenueListSkeleton />
@@ -109,7 +100,7 @@ export default function VenuesPage() {
                 No venues in this area. Try moving the map.
               </p>
             ) : (
-              <div className="space-y-3 overflow-y-auto pr-2 max-h-[600px]">
+              <div className="grid grid-cols-1 gap-4 overflow-y-auto pr-2 max-h-[600px] sm:grid-cols-2">
                 {venues.map((venue) => (
                   <VenueCard
                     key={venue.id}
@@ -122,6 +113,16 @@ export default function VenuesPage() {
               </div>
             )}
           </div>
+
+          <div className="relative h-[500px] min-h-[400px] lg:h-[600px] lg:col-span-2 order-1 lg:order-2">
+            <VenueMap
+              venues={venues}
+              selectedVenueId={selectedVenueId}
+              onVenueSelect={handleVenueSelect}
+              onBoundsChange={handleBoundsChange}
+              isFetching={isFetching}
+            />
+          </div>
         </div>
       </div>
     </main>
@@ -131,15 +132,22 @@ export default function VenuesPage() {
 
 function VenueListSkeleton() {
   return (
-    <div className="space-y-3 pr-2">
-      {[1, 2, 3, 4].map((i) => (
-        <div
-          key={i}
-          className="animate-pulse rounded-lg border-2 border-slate-200 bg-white p-4"
-        >
-          <div className="h-5 w-3/4 rounded bg-slate-200" />
-          <div className="mt-2 h-4 w-1/2 rounded bg-slate-100" />
-          <div className="mt-2 h-4 w-full rounded bg-slate-100" />
+    <div className="grid grid-cols-1 gap-4 pr-2 sm:grid-cols-2">
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div key={i} className="animate-pulse overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className="aspect-[4/3] bg-slate-200" />
+          <div className="p-4">
+            <div className="flex gap-2">
+              <div className="h-5 flex-1 rounded bg-slate-200" />
+              <div className="h-8 w-24 rounded border border-slate-200 bg-slate-100" />
+            </div>
+            <div className="mt-2 h-4 w-2/3 rounded bg-slate-100" />
+            <div className="mt-3 flex gap-4">
+              <div className="h-4 w-8 rounded bg-slate-100" />
+              <div className="h-4 w-12 rounded bg-slate-100" />
+              <div className="h-4 w-6 rounded bg-slate-100" />
+            </div>
+          </div>
         </div>
       ))}
     </div>
