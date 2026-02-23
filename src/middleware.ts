@@ -16,7 +16,13 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('auth_token')?.value;
 
-  // Admin routes require auth - check cookie (set by client on login)
+  // Đã login thì không cho vào /login — redirect về admin hoặc redirect param
+  if (pathname === '/login' && token) {
+    const redirectTo = request.nextUrl.searchParams.get('redirect') || '/admin/dashboard';
+    return NextResponse.redirect(new URL(redirectTo, request.url));
+  }
+
+  // Admin routes require auth
   if (isAdminPath(pathname)) {
     if (!token) {
       const loginUrl = new URL('/login', request.url);
@@ -29,5 +35,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/login'],
 };

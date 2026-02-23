@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { authService } from '@/services/auth.service';
@@ -17,6 +17,20 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const setAuth = useAuthStore((s) => s.setAuth);
+  const hydrate = useAuthStore((s) => s.hydrate);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isHydrated = useAuthStore((s) => s.isHydrated);
+
+  // Đã login thì không cho ở lại trang login (redirect sau khi hydrate)
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
+  useEffect(() => {
+    if (!isHydrated) return;
+    if (isAuthenticated()) {
+      router.replace(redirect);
+    }
+  }, [isHydrated, redirect, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
