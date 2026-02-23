@@ -1,7 +1,12 @@
 import type { NextConfig } from 'next';
 
+// Truyền env ra client (Next.js 15 đôi khi không inline NEXT_PUBLIC_ từ .env)
 const nextConfig: NextConfig = {
-  transpilePackages: ['react-leaflet', 'react-leaflet-markercluster'],
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8089/api',
+    NEXT_PUBLIC_USE_MOCK_DATA: process.env.NEXT_PUBLIC_USE_MOCK_DATA ?? 'false',
+  },
+  transpilePackages: ['react-leaflet'],
   output: 'standalone',
   // Fast Refresh (hot reload) bật mặc định khi chạy next dev
   // Tắt để tránh double-mount gây lỗi "Map container is already initialized" (react-leaflet)

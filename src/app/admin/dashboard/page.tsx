@@ -10,17 +10,24 @@ import { VENUES_QUERY_KEY } from '@/hooks/useVenues';
 import { VenueFormModal } from '@/components/admin/VenueFormModal';
 import type { Venue } from '@/types/venue';
 
+const PAGE_SIZE = 10;
+
 export default function AdminDashboardPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, clearAuth } = useAuthStore();
   const [editingVenue, setEditingVenue] = useState<Venue | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data: venues = [], isLoading } = useQuery({
-    queryKey: [VENUES_QUERY_KEY],
-    queryFn: () => venuesApi.getAll(),
+  const { data, isLoading } = useQuery({
+    queryKey: [VENUES_QUERY_KEY, 'admin', currentPage, PAGE_SIZE],
+    queryFn: () => venuesApi.getPaginated(currentPage, PAGE_SIZE),
   });
+
+  const venues = data?.venues ?? [];
+  const totalItems = data?.total ?? 0;
+  const totalPages = data?.lastPage ?? 1;
 
   const createMutation = useMutation({
     mutationFn: venuesApi.create,
@@ -49,6 +56,10 @@ export default function AdminDashboardPage() {
     clearAuth();
     router.push('/login');
   };
+
+  const safePage = Math.min(currentPage, totalPages);
+  const startItem = totalItems === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
+  const endItem = Math.min(safePage * PAGE_SIZE, totalItems);
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -150,6 +161,36 @@ export default function AdminDashboardPage() {
             {venues.length === 0 && (
               <div className="py-12 text-center text-slate-500">
                 No venues yet. Add your first venue.
+              </div>
+            )}
+            {totalItems > 0 && (
+              <div className="flex flex-col items-center gap-4 border-t border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:justify-between">
+                <p className="text-sm text-slate-600">
+                  Showing <span className="font-medium">{startItem}</span>–
+                  <span className="font-medium">{endItem}</span> of{' '}
+                  <span className="font-medium">{totalItems}</span> venues
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={safePage <= 1}
+                    className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:hover:bg-white"
+                  >
+                    Previous
+                  </button>
+                  <span className="px-2 text-sm text-slate-600">
+                    Page {safePage} of {totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={safePage >= totalPages}
+                    className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:hover:bg-white"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             )}
           </div>

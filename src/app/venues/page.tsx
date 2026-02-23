@@ -9,24 +9,16 @@ import type { Venue } from '@/types/venue';
 import type { BoundingBox } from '@/types/venue';
 import Link from 'next/link';
 
-// Bounds mặc định quanh Hà Nội (fetch venues lần đầu)
-const DEFAULT_BOUNDS: BoundingBox = {
-  north: 21.15,
-  south: 20.9,
-  east: 106.0,
-  west: 105.6,
-};
-
 export default function VenuesPage() {
-  const [bounds, setBounds] = useState<BoundingBox | null>(DEFAULT_BOUNDS);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
   const cardRefsRef = useRef<Map<string, HTMLDivElement>>(new Map());
   const listContainerRef = useRef<HTMLDivElement>(null);
 
-  const { data: venues = [], isLoading, isFetching, error } = useVenues(bounds);
+  // Không gửi bounds → API trả về toàn bộ venue, map hiển thị đủ
+  const { data: venues = [], isLoading, isFetching, error } = useVenues(null);
 
-  const handleBoundsChange = useCallback((newBounds: BoundingBox) => {
-    setBounds(newBounds);
+  const handleBoundsChange = useCallback((_newBounds: BoundingBox) => {
+    // Không refetch theo bounds để giữ hiển thị toàn bộ venue trên map
   }, []);
 
   const handleVenueSelect = useCallback((venue: Venue | null) => {
@@ -72,7 +64,7 @@ export default function VenuesPage() {
               Login
             </Link>
             <Link
-              href="/admin/dashboard"
+              href="/admin"
               className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
             >
               Admin

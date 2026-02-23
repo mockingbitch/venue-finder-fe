@@ -1,13 +1,22 @@
 import { apiClient } from '@/lib/axios';
 import type { LoginCredentials, AuthResponse, AuthUser } from '@/types/auth';
 
-const AUTH_ENDPOINT = '/auth';
+const AUTH_ENDPOINT = '';
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
+const USE_MOCK = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_USE_MOCK_DATA !== 'false';
+
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
+    if (USE_MOCK) {
+      return {
+        token: 'mock-jwt-token',
+        user: { id: 'mock-1', email: credentials.email, name: 'Admin' },
+        expiresIn: 86400,
+      };
+    }
     const { data } = await apiClient.post<AuthResponse>(`${AUTH_ENDPOINT}/login`, credentials);
     return data;
   },

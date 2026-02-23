@@ -1,8 +1,3 @@
-# Local / development: hot reload
-# Chạy: docker-compose up --build
-
-version: '3.8'
-
 services:
   app:
     build:
@@ -10,11 +5,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8089/api}
-      - NEXT_PUBLIC_USE_MOCK_DATA=${NEXT_PUBLIC_USE_MOCK_DATA:-true}
-      - WATCHPACK_POLLING=true
     volumes:
       - .:/app
       - /app/node_modules

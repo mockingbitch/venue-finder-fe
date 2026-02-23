@@ -8,9 +8,9 @@ export const VENUES_QUERY_KEY = 'venues';
 
 export function useVenues(bounds?: BoundingBox | null) {
   return useQuery({
-    queryKey: [VENUES_QUERY_KEY, bounds],
-    queryFn: () => venuesApi.getAll(bounds ?? undefined),
-    enabled: bounds != null,
+    queryKey: [VENUES_QUERY_KEY, bounds ?? 'all'],
+    queryFn: () =>
+      venuesApi.getAll(bounds ?? undefined, { per_page: 0 }),
     placeholderData: (previousData) => previousData,
   });
 }

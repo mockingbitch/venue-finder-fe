@@ -12,8 +12,12 @@ COPY package.json package-lock.json* ./
 RUN npm install
 
 # Copy source sẽ được mount qua volume khi chạy docker-compose
-# Copy mặc định để build image có thể chạy standalone
 COPY . .
+
+# Entrypoint: khi volume mount ghi đè /app, node_modules có thể trống → cài lại
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 3000
 ENV PORT=3000

@@ -23,6 +23,7 @@ export function VenueFormModal({
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [capacity, setCapacity] = useState('');
+  const [price, setPrice] = useState('');
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export function VenueFormModal({
       setLatitude(String(venue.latitude));
       setLongitude(String(venue.longitude));
       setCapacity(venue.capacity ? String(venue.capacity) : '');
+      setPrice(venue.price != null ? String(venue.price) : '');
       setImageUrl(venue.imageUrl ?? '');
     } else {
       setName('');
@@ -41,6 +43,7 @@ export function VenueFormModal({
       setLatitude('21.0285');
       setLongitude('105.8542');
       setCapacity('');
+      setPrice('0');
       setImageUrl('');
     }
   }, [venue]);
@@ -51,6 +54,9 @@ export function VenueFormModal({
     const lon = parseFloat(longitude);
     if (isNaN(lat) || isNaN(lon)) return;
 
+    const priceNum = price === '' ? 0 : parseFloat(price);
+    if (Number.isNaN(priceNum)) return;
+
     onSubmit({
       name,
       description: description || undefined,
@@ -58,6 +64,7 @@ export function VenueFormModal({
       latitude: lat,
       longitude: lon,
       capacity: capacity ? parseInt(capacity, 10) : undefined,
+      price: priceNum,
       imageUrl: imageUrl || undefined,
     });
   };
@@ -128,6 +135,18 @@ export function VenueFormModal({
               min="1"
               value={capacity}
               onChange={(e) => setCapacity(e.target.value)}
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700">Price *</label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              required
               className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-2"
             />
           </div>

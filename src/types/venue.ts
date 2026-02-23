@@ -6,6 +6,8 @@ export interface Venue {
   latitude: number;
   longitude: number;
   capacity?: number;
+  /** Giá (bắt buộc khi tạo/sửa theo API) */
+  price?: number;
   imageUrl?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -26,6 +28,8 @@ export interface VenueCreateInput {
   latitude: number;
   longitude: number;
   capacity?: number;
+  /** Giá (bắt buộc theo API Laravel) */
+  price: number;
   imageUrl?: string;
 }
 

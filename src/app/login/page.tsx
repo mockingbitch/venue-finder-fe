@@ -45,6 +45,11 @@ function LoginForm() {
         <p className="mt-2 text-sm text-slate-600">
           Sign in to manage venues
         </p>
+        {process.env.NEXT_PUBLIC_USE_MOCK_DATA !== 'false' && (
+          <p className="mt-1 text-xs text-amber-600">
+            Mock mode: any email and password will work.
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {error && (
